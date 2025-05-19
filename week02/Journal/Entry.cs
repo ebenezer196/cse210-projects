@@ -1,29 +1,13 @@
 public class Entry
 {
-    public string Date { get; set; }
-    public string Prompt { get; set; }
-    public string Response { get; set; }
+    public string _date;
+    public string _prompt;
+    public string _response;
 
-    public Entry(string date, string prompt, string response)
+    public void Display()
     {
-        Date = date;
-        Prompt = prompt;
-        Response = response;
-    }
-
-    public override string ToString()
-    {
-        return $"Date: {Date}\nPrompt: {Prompt}\nResponse: {Response}\n";
-    }
-
-    public string ToFileFormat()
-    {
-        return $"{Date}|{Prompt}|{Response}";
-    }
-
-    public static Entry FromFileFormat(string line)
-    {
-        var parts = line.Split('|');
-        return new Entry(parts[0], parts[1], parts[2]);
+        Console.WriteLine($"Date: {_date}");
+        Console.WriteLine($"Prompt: {_prompt}");
+        Console.WriteLine($"Response: {_response}\n");
     }
 }

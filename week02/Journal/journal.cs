@@ -4,38 +4,52 @@ using System.IO;
 
 public class Journal
 {
-    private List<Entry> entries = new List<Entry>();
+    public List<Entry> _entries = new List<Entry>();
 
-    public void AddEntry(Entry entry)
+    public void AddEntry(string prompt, string response)
     {
-        entries.Add(entry);
+        Entry entry = new Entry
+        {
+            _date = DateTime.Now.ToString("yyyy-MM-dd"),
+            _prompt = prompt,
+            _response = response
+        };
+        _entries.Add(entry);
     }
 
     public void Display()
     {
-        foreach (var entry in entries)
+        foreach (var entry in _entries)
         {
-            Console.WriteLine(entry);
+            entry.Display();
         }
     }
 
     public void SaveToFile(string filename)
     {
-        using (StreamWriter writer = new StreamWriter(filename))
+        using (StreamWriter outputFile = new StreamWriter(filename))
         {
-            foreach (var entry in entries)
+            foreach (Entry e in _entries)
             {
-                writer.WriteLine(entry.ToFileFormat());
+                outputFile.WriteLine($"{e._date}|{e._prompt}|{e._response}");
             }
         }
     }
 
     public void LoadFromFile(string filename)
     {
-        entries.Clear();
-        foreach (var line in File.ReadLines(filename))
+        _entries.Clear();
+        string[] lines = File.ReadAllLines(filename);
+        foreach (string line in lines)
         {
-            entries.Add(Entry.FromFileFormat(line));
+            string[] parts = line.Split("|");
+            Entry entry = new Entry
+            {
+                _date = parts[0],
+                _prompt = parts[1],
+                _response = parts[2]
+            };
+            _entries.Add(entry);
         }
     }
 }
